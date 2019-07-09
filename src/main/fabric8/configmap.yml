@@ -8,4 +8,4 @@ data:
     spring.jpa.hibernate.ddl-auto=create
 kind: ConfigMap
 metadata:
-  name: message-app-config
+  name: springboot-app-config
