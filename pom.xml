@@ -22,8 +22,8 @@
     <version>23</version>
   </parent>
   <groupId>com.yourcompany.newapp</groupId>
-  <artifactId>message</artifactId>
-  <version>2.0.0</version>
+  <artifactId>message-v2</artifactId>
+  <version>1.0.0</version>
   <name>Spring Boot - CRUD Booster</name>
   <description>Spring Boot - CRUD Booster</description>
   <properties>
@@ -221,6 +221,7 @@
         <db.name>PostgreSQL</db.name>
       </properties>
       <build>
+        <finalName>testing</finalName>
         <plugins>
           <plugin>
             <groupId>io.fabric8</groupId>
@@ -236,17 +237,17 @@
               </execution>
             </executions>
             <configuration>
-          <resources>
-              <labels>
-                  <all>
-                      <property>
-                          <name>app</name>
-                          <value>message</value>
-                      </property>
-                  </all>
-              </labels>
-          </resources>
-        </configuration>
+                <resources>
+                  <labels>
+                      <all>
+                          <property>
+                              <name>module</name>
+                              <value>message</value>
+                          </property>
+                      </all>
+                  </labels>
+                </resources>
+            </configuration>
           </plugin>
         </plugins>
       </build>
