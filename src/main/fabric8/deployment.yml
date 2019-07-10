@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      containers:
+      - volumeMounts:
+        - name: config
+          mountPath: /app/config
+        env:
+        - name: JAVA_ARGS
+          value: "-s/app/config/project-defaults.yml"
+      volumes:
+        - name: config
+          configMap:
+            name: thorntail-app-config
+            items:
+            - key: "app-config.yml"
+              path: "project-defaults.yml"

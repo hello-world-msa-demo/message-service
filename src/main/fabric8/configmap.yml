@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  app-config.yml: |-
+    thorntailcd :
+      datasources:
+        data-sources:
+          MessageDS:
+            driver-name: postgresql
+            connection-url: jdbc:postgresql://message-postgresql:5432/message
+            user-name: message
+            password: message
+kind: ConfigMap
+metadata:
+  name: thorntail-app-config
