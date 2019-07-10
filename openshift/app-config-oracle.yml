@@ -1,0 +1,13 @@
+thorntail:
+  datasources:
+    data-sources:
+      MessageDS:
+        driver-name: oracle
+        connection-url: jdbc:oracle:thin:@myhost:1521/myorcldbservicename
+        user-name: myusername
+        password: mypassword
+        valid-connection-checker-class-name: org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker
+        validate-on-match: true
+        background-validation: false
+        stale-connection-checker-class-name: org.jboss.jca.adapters.jdbc.extensions.oracle.OracleStaleConnectionChecker
+        exception-sorter-class-name: org.jboss.jca.adapters.jdbc.extensions.oracle.OracleExceptionSorter

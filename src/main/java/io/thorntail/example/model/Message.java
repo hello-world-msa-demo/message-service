@@ -13,7 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "italian_message")
+@Table(name = "italian_message", schema = "tgpec0qj")
 @NamedQueries({
         @NamedQuery(name = "Messages.findAll", query = "SELECT m FROM Message m")
 })
