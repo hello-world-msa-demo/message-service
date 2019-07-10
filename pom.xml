@@ -335,13 +335,17 @@
     <profile>
       <id>openshift-oracle</id>
       <activation />
+      <repositories>
+        <repository>
+          <id>lib</id>
+          <url>file://${project.basedir}/lib</url>
+        </repository>
+      </repositories>
       <dependencies>
         <dependency>
-          <artifactId>com.oracle.jdbc</artifactId>
-          <groupId>ojdbc7</groupId>
-          <scope>system</scope>
-          <version>7</version>
-          <systemPath>${project.basedir}/lib/ojdbc7.jar</systemPath>
+          <groupId>com.oracle.jdbc</groupId>
+          <artifactId>ojdbc7</artifactId>
+          <version>0.0.0</version>
         </dependency>
       </dependencies>
       <build>
