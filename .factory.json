@@ -1,0 +1,130 @@
+{
+  "v": "4.0",
+  "name": "factory-message-service-v1",
+  "workspace": {
+    "defaultEnv": "default",
+    "environments": {
+      "default": {
+        "machines": {
+          "dev-machine": {
+            "attributes": {
+              "memoryLimitBytes": "2147483648"
+            },
+            "servers": {
+              "thorntail": {
+                "port": "8080",
+                "attributes": {},
+                "protocol": "http"
+              }
+            },
+            "volumes": {
+              "m2": {
+                "path": "/home/jboss/.m2"
+              },
+              "javadata": {
+                "path": "/home/jboss/jdtls/data"
+              }
+            },
+            "installers": [
+              "org.eclipse.che.exec",
+              "org.eclipse.che.terminal",
+              "org.eclipse.che.ws-agent",
+              "org.eclipse.che.ls.java",
+              "com.redhat.bayesian.lsp"
+            ],
+            "env": {
+              "MAVEN_MIRROR_URL": "http://nexus.lab-infra.svc:8081/repository/maven-all-public"
+            }
+          }
+        },
+        "recipe": {
+          "type": "dockerimage",
+          "content": "registry.redhat.io/codeready-workspaces/stacks-java-rhel8"
+        }
+      }
+    },
+    "projects": [
+      {
+        "links": [],
+        "name": "message-service",
+        "attributes": {
+          "contribute_to_branch": [
+            "v1"
+          ]
+        },
+        "type": "maven",
+        "source": {
+          "location": "https://github.com/hello-world-msa-demo/message-service.git",
+          "type": "github",
+          "parameters": {
+            "branch": "v1"
+          }
+        },
+        "path": "/message-service",
+        "problems": [],
+        "mixins": [
+          "pullrequest"
+        ]
+      }
+    ],
+    "name": "wksp-message-v1",
+    "attributes": {},
+    "commands": [
+      {
+        "commandLine": "MAVEN_OPTS='-Xmx200m' && mvn verify -f ${current.project.path}/pom.xml -DskipTests",
+        "name": "test",
+        "attributes": {
+          "goal": "Build",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "export MAVEN_OPTS='-Xms200m' && mvn clean install -f ${current.project.path}/pom.xml -DskipTests && MAVEN_OPTS='-Xmx200m' && cd ${current.project.path} && java -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n -jar target/*.jar -Djava.net.preferIPv4Stack=true",
+        "name": "debug",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": "${server.thorntail}"
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "${HOME}/stack-analysis.sh -f ${current.project.path}/pom.xml -p ${current.project.path}",
+        "name": "dependency_analysis",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": ""
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "MAVEN_OPTS='-Xmx200m' && cd ${current.project.path} && mvn clean install",
+        "name": "build",
+        "attributes": {
+          "goal": "Build",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "export MAVEN_OPTS='-Xms200m' && cd ${current.project.path} && mvn thorntail:run -DskipTests -Plocal",
+        "name": "run",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": "${server.thorntail}"
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "MAVEN_OPTS='-Xmx200m' && cd ${current.project.path} && mvn clean fabric8:deploy -Popenshift",
+        "name": "deploy to OpenShift",
+        "attributes": {
+          "goal": "Build",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      }
+    ],
+    "links": []
+  }
+}
