@@ -22,8 +22,8 @@
     <version>23</version>
   </parent>
   <groupId>com.yourcompany.newapp</groupId>
-  <artifactId>message</artifactId>
-  <version>2.0.0</version>
+  <artifactId>message-v2</artifactId>
+  <version>1.0.0</version>
   <name>Spring Boot - CRUD Booster</name>
   <description>Spring Boot - CRUD Booster</description>
   <properties>
@@ -240,7 +240,7 @@
               <labels>
                   <all>
                       <property>
-                          <name>app</name>
+                          <name>module</name>
                           <value>message</value>
                       </property>
                   </all>
@@ -253,6 +253,28 @@
     </profile>
     <profile>
       <id>openshift-it</id>
+      <repositories>
+        <repository>
+          <id>lib</id>
+          <url>file://${project.basedir}/lib</url>
+        </repository>
+      </repositories>
+      <dependencies>
+        <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.oracle.jdbc</groupId>
+          <artifactId>ojdbc7</artifactId>
+          <version>0.0.0</version>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+      <properties>
+        <db.name>PostgreSQL or Oracle</db.name>
+      </properties>
       <build>
         <plugins>
           <plugin>

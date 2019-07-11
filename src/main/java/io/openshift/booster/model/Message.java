@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "english_message", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
+@Table(name = "english_message", schema = "tgpec0qj", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -24,14 +24,14 @@ public class Message implements Serializable {
     private String value;
 
     public Message() {
-        
+
     }
-    
+
     public Message(String value) {
         this.value = value;
-        
+
     }
-    
+
     public Integer getId() {
         return id;
     }

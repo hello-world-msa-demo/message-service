@@ -1,0 +1,9 @@
+target
+.idea
+*.iml
+.DS_STORE
+.vscode/
+/prod.sh
+/.settings/
+/.classpath
+/.project
