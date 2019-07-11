@@ -300,6 +300,24 @@
     </profile>
     <profile>
       <id>openshift-it</id>
+      <repositories>
+        <repository>
+          <id>lib</id>
+          <url>file://${project.basedir}/lib</url>
+        </repository>
+      </repositories>
+      <dependencies>
+        <dependency>
+          <groupId>org.postgresql</groupId>
+          <artifactId>postgresql</artifactId>
+          <version>${version.postgresql}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.oracle.jdbc</groupId>
+          <artifactId>ojdbc7</artifactId>
+          <version>0.0.0</version>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
@@ -331,35 +349,6 @@
         </plugins>
       </build>
       <activation />
-    </profile>
-    <profile>
-      <id>openshift-oracle</id>
-      <activation />
-      <repositories>
-        <repository>
-          <id>lib</id>
-          <url>file://${project.basedir}/lib</url>
-        </repository>
-      </repositories>
-      <dependencies>
-        <dependency>
-          <groupId>com.oracle.jdbc</groupId>
-          <artifactId>ojdbc7</artifactId>
-          <version>0.0.0</version>
-        </dependency>
-      </dependencies>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>${version.maven-surefire-plugin}</version>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 </project>

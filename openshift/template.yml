@@ -52,7 +52,7 @@ objects:
       sourceStrategy:
         env:
         - name: MAVEN_ARGS
-          value: '-Popenshift'
+          value: '-Popenshift-it'
         from:
           kind: DockerImage
           name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.6
@@ -121,7 +121,6 @@ objects:
                 fieldPath: metadata.namespace
           - name: GC_MAX_METASPACE_SIZE
             value: "300"
-          image: docker-registry.default.svc:5000/hello-world/message-v1@sha256:3ce34782814d2294bf34b1d7ae5ca7d89dbe490dbf53489e06bc9d153c49e2fe
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -185,7 +184,6 @@ objects:
         from:
           kind: ImageStreamTag
           name: message-v1:latest
-        lastTriggeredImage: docker-registry.default.svc:5000/hello-world/message-v1@sha256:3ce34782814d2294bf34b1d7ae5ca7d89dbe490dbf53489e06bc9d153c49e2fe
       type: ImageChange
 - apiVersion: v1
   kind: Service
