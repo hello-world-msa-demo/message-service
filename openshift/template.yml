@@ -4,6 +4,8 @@ metadata:
   name: message-service-v1-template
   annotations:
     description: "Description"
+parameters:
+labels:
 objects:
 - apiVersion: v1
   data:
@@ -232,5 +234,4 @@ objects:
       name: message-v1
       weight: 100
     wildcardPolicy: None
-parameters:
-labels:
+

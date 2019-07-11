@@ -217,6 +217,9 @@
           <version>${version.h2}</version>
         </dependency>
       </dependencies>
+      <properties>
+        <db.name>H2</db.name>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -241,6 +244,9 @@
           <version>${version.postgresql}</version>
         </dependency>
       </dependencies>
+      <properties>
+        <db.name>PostgreSQL</db.name>
+      </properties>
       <activation />
       <build>
         <plugins>
@@ -250,6 +256,8 @@
             <version>${version.fabric8-maven-plugin}</version>
             <executions>
               <execution>
+                <id>fmp</id>
+                <phase>install</phase>
                 <goals>
                   <goal>resource</goal>
                   <goal>build</goal>
@@ -318,6 +326,9 @@
           <version>0.0.0</version>
         </dependency>
       </dependencies>
+      <properties>
+        <db.name>PostgreSQL or Oracle</db.name>
+      </properties>
       <build>
         <plugins>
           <plugin>
