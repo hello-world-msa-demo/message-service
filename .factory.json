@@ -1,0 +1,119 @@
+{
+  "v": "4.0",
+  "name": "factory-message-service-v2",
+  "workspace": {
+    "defaultEnv": "default",
+    "environments": {
+      "default": {
+        "machines": {
+          "dev-machine": {
+            "attributes": {
+              "memoryLimitBytes": "2147483648"
+            },
+            "servers": {
+              "springboot": {
+                "port": "8080",
+                "attributes": {},
+                "protocol": "http"
+              }
+            },
+            "volumes": {
+              "m2": {
+                "path": "/home/jboss/.m2"
+              },
+              "javadata": {
+                "path": "/home/jboss/jdtls/data"
+              }
+            },
+            "installers": [
+              "org.eclipse.che.exec",
+              "org.eclipse.che.terminal",
+              "org.eclipse.che.ws-agent",
+              "org.eclipse.che.ls.java",
+              "com.redhat.bayesian.lsp"
+            ],
+            "env": {}
+          }
+        },
+        "recipe": {
+          "type": "dockerimage",
+          "content": "registry.redhat.io/codeready-workspaces/stacks-java-rhel8"
+        }
+      }
+    },
+    "projects": [
+      {
+        "links": [],
+        "name": "message-service",
+        "attributes": {
+          "contribute_to_branch": [
+            "v2"
+          ]
+        },
+        "type": "maven",
+        "source": {
+          "location": "https://github.com/hello-world-msa-demo/message-service.git",
+          "type": "github",
+          "parameters": {
+            "branch": "v2"
+          }
+        },
+        "path": "/message-service",
+        "problems": [],
+        "mixins": [
+          "pullrequest"
+        ]
+      }
+    ],
+    "name": "wksp-message-v2",
+    "attributes": {},
+    "commands": [
+      {
+        "commandLine": "mvn -f ${current.project.path}/pom.xml spring-boot:run -Drun.jvmArguments=\"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005\"",
+        "name": "debug",
+        "attributes": {
+          "goal": "Debug",
+          "previewUrl": "${server.springboot}"
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "${HOME}/stack-analysis.sh -f ${current.project.path}/pom.xml -p ${current.project.path}",
+        "name": "dependency_analysis",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": ""
+        },
+        "type": "custom"
+      },
+      {
+        "commandLine": "mvn -f ${current.project.path}/pom.xml spring-boot:run -Plocal",
+        "name": "run",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": "${server.springboot}"
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "MAVEN_OPTS='-Xmx200m' && mvn clean install -f ${current.project.path}/pom.xml",
+        "name": "build",
+        "attributes": {
+          "goal": "Build",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      },
+      {
+        "commandLine": "mvn -f ${current.project.path}/pom.xml clean fabric8:deploy -Popenshift -DskipTests",
+        "name": "deploy to OpenShift",
+        "attributes": {
+          "goal": "Run",
+          "previewUrl": ""
+        },
+        "type": "mvn"
+      }
+    ],
+    "links": []
+  }
+}

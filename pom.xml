@@ -221,6 +221,7 @@
         <db.name>PostgreSQL</db.name>
       </properties>
       <build>
+        <finalName>testing</finalName>
         <plugins>
           <plugin>
             <groupId>io.fabric8</groupId>
@@ -236,17 +237,17 @@
               </execution>
             </executions>
             <configuration>
-          <resources>
-              <labels>
-                  <all>
-                      <property>
-                          <name>module</name>
-                          <value>message</value>
-                      </property>
-                  </all>
-              </labels>
-          </resources>
-        </configuration>
+                <resources>
+                  <labels>
+                      <all>
+                          <property>
+                              <name>module</name>
+                              <value>message</value>
+                          </property>
+                      </all>
+                  </labels>
+                </resources>
+            </configuration>
           </plugin>
         </plugins>
       </build>
