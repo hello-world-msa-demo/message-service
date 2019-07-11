@@ -50,6 +50,9 @@ objects:
       type: Git
     strategy:
       sourceStrategy:
+        env:
+        - name: MAVEN_ARGS
+          value: '-Popenshift'
         from:
           kind: DockerImage
           name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.6
