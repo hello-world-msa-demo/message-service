@@ -205,8 +205,10 @@ objects:
     resources: {}
     runPolicy: Serial
     source:
-      binary: {}
-      type: Binary
+      git:
+        ref: v2
+        uri: 'https://github.com/hello-world-msa-demo/message-service.git'
+      type: Git
     strategy:
       sourceStrategy:
         env:
