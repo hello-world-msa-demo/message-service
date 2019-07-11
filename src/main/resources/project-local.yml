@@ -1,0 +1,8 @@
+thorntail:
+  datasources:
+    data-sources:
+      MessageDS:
+        driver-name: h2
+        connection-url: jdbc:h2:mem:message;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        user-name: sa
+        password: sa

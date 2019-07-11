@@ -1,0 +1,235 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: message-service-v1-template
+  annotations:
+    description: "Description"
+objects:
+- apiVersion: v1
+  data:
+    app-config.yml: |-
+      thorntailcd :
+        datasources:
+          data-sources:
+            MessageDS:
+              driver-name: postgresql
+              connection-url: jdbc:postgresql://message-postgresql:5432/message
+              user-name: message
+              password: message
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: message-v1
+      group: com.yourcompany.newapp
+      provider: fabric8
+      version: 1.0.0
+    name: thorntail-app-config
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: message-v1
+      group: com.yourcompany.newapp
+      module: message
+      provider: fabric8
+      version: 1.0.0
+    name: message-v1-s2i
+  spec:
+    nodeSelector: {}
+    output:
+      to:
+        kind: ImageStreamTag
+        name: message-v1:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        ref: v1
+        uri: 'https://github.com/hello-world-msa-demo/message-service.git'
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.6
+      type: Source
+    triggers:
+    - type: ImageChange
+      imageChange: {}
+    - type: ConfigChange
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: message-v1
+      group: com.yourcompany.newapp
+      module: message
+      provider: fabric8
+      version: 1.0.0
+    name: message-v1
+  spec:
+    lookupPolicy:
+      local: false
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: message-v1
+      group: com.yourcompany.newapp
+      module: message
+      provider: fabric8
+      version: 1.0.0
+    name: message-v1
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: message-v1
+      group: com.yourcompany.newapp
+      provider: fabric8
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 3600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: message-v1
+          group: com.yourcompany.newapp
+          module: message
+          provider: fabric8
+          version: 1.0.0
+      spec:
+        containers:
+        - env:
+          - name: JAVA_ARGS
+            value: -s/app/config/project-defaults.yml
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: GC_MAX_METASPACE_SIZE
+            value: "300"
+          image: docker-registry.default.svc:5000/hello-world/message-v1@sha256:3ce34782814d2294bf34b1d7ae5ca7d89dbe490dbf53489e06bc9d153c49e2fe
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: thorntail-v2
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 9779
+            name: prometheus
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /app/config
+            name: config
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: app-config.yml
+              path: project-defaults.yml
+            name: thorntail-app-config
+          name: config
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - thorntail-v2
+        from:
+          kind: ImageStreamTag
+          name: message-v1:latest
+        lastTriggeredImage: docker-registry.default.svc:5000/hello-world/message-v1@sha256:3ce34782814d2294bf34b1d7ae5ca7d89dbe490dbf53489e06bc9d153c49e2fe
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/port: "9779"
+      prometheus.io/scrape: "true"
+    labels:
+      app: message-v1
+      expose: "true"
+      group: com.yourcompany.newapp
+      module: message
+      provider: fabric8
+      version: 1.0.0
+    name: message-v1
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: message-v1
+      group: com.yourcompany.newapp
+      provider: fabric8
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    labels:
+      app: message-v1
+      expose: "true"
+      group: com.yourcompany.newapp
+      provider: fabric8
+      version: 1.0.0
+    name: message-v1
+  spec:
+    host: message-v1-hello-world.apps.nantes-30d4.openshiftworkshop.com
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: message-v1
+      weight: 100
+    wildcardPolicy: None
+parameters:
+labels:
