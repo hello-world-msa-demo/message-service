@@ -32,7 +32,6 @@ objects:
       version: 1.0.0
     name: message-v2
   spec:
-    host: message-v2-hello-world.apps.nantes-30d4.openshiftworkshop.com
     port:
       targetPort: 8080
     to:
