@@ -5,19 +5,15 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "english_message", schema = "tgpec0qj", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
+@Table(name = "english_message")
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(length = 10, unique = true)
@@ -27,9 +23,9 @@ public class Message implements Serializable {
 
     }
 
-    public Message(String value) {
+    public Message(Integer id, String value) {
+        this.id = id;
         this.value = value;
-
     }
 
     public Integer getId() {

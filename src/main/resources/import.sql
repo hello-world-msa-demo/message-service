@@ -1,1 +1,1 @@
-insert into tgpec0qj.english_message (value) values ('Hello');
+insert into english_message (id, value) values (1, 'Hello');

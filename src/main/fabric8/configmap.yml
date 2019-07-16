@@ -5,6 +5,12 @@ data:
     spring.datasource.username=message
     spring.datasource.password=message
     spring.datasource.driver-class-name=org.postgresql.Driver
+    
+    spring.jpa.properties.javax.persistence.schema-generation.database.action=drop-and-create
+    spring.jpa.properties.javax.persistence.schema-generation.create-source=metadata
+    spring.jpa.properties.javax.persistence.schema-generation.drop-source=metadata
+    spring.jpa.properties.javax.persistence.sql-load-script-source=import.sql
+    
 kind: ConfigMap
 metadata:
   name: springboot-app-config
